@@ -5,37 +5,31 @@ import { Button } from '@/components/ui/button'
 import { Card } from '@/components/ui/card'
 import { Snowflake, RefreshCw } from 'lucide-react'
 
-export const christmasEmojis = [
-    '🎅', '🎄', '🎁', '⛄', '🦌', '🔔', '🕯️', '🧦', '❄️', '🍪'
-  ];
-  
-  export interface CardType {
-    id: number;
-    emoji: string;
-    isFlipped: boolean;
-    isMatched: boolean;
+interface CardType {
+  id: number
+  emoji: string
+  isFlipped: boolean
+  isMatched: boolean
+}
+
+export const createNewGame = (): CardType[] => {
+  const emojis = ['🎅', '🎄', '🎁', '❄️', '⛄', '🔔', '🦌', '🍪']
+  const cards = emojis.concat(emojis).map((emoji, index) => ({
+    id: index,
+    emoji,
+    isFlipped: false,
+    isMatched: false,
+  }))
+  return shuffleArray(cards)
+}
+
+const shuffleArray = (array: any[]) => {
+  for (let i = array.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1))
+    ;[array[i], array[j]] = [array[j], array[i]]
   }
-  
-  export function shuffleArray<T>(array: T[]): T[] {
-    const newArray = [...array];
-    for (let i = newArray.length - 1; i > 0; i--) {
-      const j = Math.floor(Math.random() * (i + 1));
-      [newArray[i], newArray[j]] = [newArray[j], newArray[i]];
-    }
-    return newArray;
-  }
-  
-  export function createNewGame(): CardType[] {
-    const shuffledEmojis = shuffleArray([...christmasEmojis, ...christmasEmojis]);
-    return shuffledEmojis.map((emoji, index) => ({
-      id: index,
-      emoji,
-      isFlipped: false,
-      isMatched: false,
-    }));
-  }
-  
-  
+  return array
+}
 
 export default function ChristmasMemoryGame() {
   const [cards, setCards] = useState<CardType[]>([])

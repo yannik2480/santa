@@ -30,10 +30,10 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased bg-[#D2B48C]`}
       >
-
         <Header />
         <Providers>{children}</Providers>
         <Footer />
+        <audio src="https://youtu.be/rLG8yReHs7k" autoPlay loop style={{ display: "none" }} />
       </body>
     </html>
   );

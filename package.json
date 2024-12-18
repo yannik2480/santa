@@ -13,6 +13,7 @@
     "@heroicons/react": "^2.2.0",
     "@radix-ui/react-checkbox": "^1.1.3",
     "@radix-ui/react-slot": "^1.1.0",
+    "@tabler/icons-react": "^3.26.0",
     "@tanstack/react-query": "^5.62.7",
     "aos": "^3.0.0-beta.6",
     "cheerio": "^1.0.0",

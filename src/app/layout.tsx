@@ -33,7 +33,7 @@ export default function RootLayout({
         <Header />
         <Providers>{children}</Providers>
         <Footer />
-        <audio src="https://youtu.be/rLG8yReHs7k" autoPlay loop style={{ display: "none" }} />
+        <audio src="https://youtu.be/rLG8yReHs7k" autoPlay loop className="hidden" />
       </body>
     </html>
   );

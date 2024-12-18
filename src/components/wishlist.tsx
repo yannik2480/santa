@@ -30,7 +30,7 @@ export default function Wishlist() {
     </div>
   ) : (
     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 p-4">
-      {whishes?.map((wish: any) => (
+      {whishes?.map((wish: { name: string; shortDescription: string; description: string }) => (
         <Card
           key={wish.name}
           className="border-2 border-green-500 shadow-lg hover:shadow-xl transition-shadow flex flex-col justify-between"

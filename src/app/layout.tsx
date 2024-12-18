@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Header from "@/components/header";
-import Snowfall from "@/components/snowflakes";
 import Providers from "./providers";
 import Footer from "@/components/footer";
 

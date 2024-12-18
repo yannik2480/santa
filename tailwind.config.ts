@@ -1,4 +1,5 @@
 import type { Config } from "tailwindcss";
+import type { PluginAPI } from 'tailwindcss/types/config';
 
 export default {
     darkMode: ["class"],
@@ -51,6 +52,9 @@ export default {
   				'5': 'hsl(var(--chart-5))'
   			}
   		},
+		  rotate: {
+			'y-180': 'rotateY(180deg)',
+		  },
   		borderRadius: {
   			lg: 'var(--radius)',
   			md: 'calc(var(--radius) - 2px)',
@@ -58,5 +62,14 @@ export default {
   		}
   	}
   },
-  plugins: [require("tailwindcss-animate")],
+  plugins: [
+	function ({ addUtilities }: PluginAPI) {
+      const newUtilities = {
+        '.backface-hidden': {
+          'backface-visibility': 'hidden',
+        },
+      }
+      addUtilities(newUtilities)
+    }
+  ],
 } satisfies Config;

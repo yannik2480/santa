@@ -1,68 +1,96 @@
-"use client";
+"use client"
 
-import Link from "next/link";
-import { useEffect, useState } from "react";
-import AOS from 'aos';
-import 'aos/dist/aos.css';
-import { Skeleton } from "./ui/skeleton";
+import React, { useState, useEffect } from "react"
+import Link from "next/link"
+import { Menu, X } from 'lucide-react'
 
-interface TimeLeft {
-    days: number;
-    hours: number;
-    minutes: number;
-    seconds: number;
-}
+const menuItems = [
+    { name: "Startseite", href: "/" },
+    { name: "Wunschzettel", href: "/wishes" },
+    { name: "Spiel", href: "/game" }
+]
 
 export default function Header() {
-    const [timeLeft, setTimeLeft] = useState<TimeLeft | null>(null);
-
-    const calculateTimeLeft = (): TimeLeft => {
-        const now = new Date();
-        let christmas = new Date(now.getFullYear(), 11, 25);
-        
-        if (now > christmas) {
-            christmas = new Date(now.getFullYear() + 1, 11, 25);
-        }
-        
-        const diff = christmas.getTime() - now.getTime();
-
-        return {
-            days: Math.floor(diff / (1000 * 60 * 60 * 24)),
-            hours: Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60)),
-            minutes: Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60)),
-            seconds: Math.floor((diff % (1000 * 60)) / 1000)
-        };
-    };
-
-    useEffect(() => {
-        setTimeLeft(calculateTimeLeft());
-        const timer = setInterval(() => {
-            setTimeLeft(calculateTimeLeft());
-        }, 1000);
-
-        return () => clearInterval(timer);
-    }, []);
-
-    AOS.init();
+    const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
 
     return (
-        <header data-aos="fade-down" className="flex fixed top-4 items-center justify-between w-1/2 p-4 px-8 bg-gray-100 rounded-full text-blue-600">
-            <div className="flex justify-center christmas-countdown gap-4">
-                <h2 className="text-2xl">🎄</h2>
-                <div>
-                    {timeLeft ? (
-                        `${timeLeft.days} Tage, ${timeLeft.hours} Stunden, 
-                        ${timeLeft.minutes} Minuten, ${timeLeft.seconds} Sekunden`
-                    ) : (
-                        <Skeleton className="h-4 w-12"/>
-                    )}
+        <nav className="fixed top-0 left-1/2 z-50 w-[97%] md:w-1/2 -translate-x-1/2 mt-4" >
+            <div className="rounded-full bg-white bg-opacity-20 backdrop-blur-lg backdrop-filter">
+                    <div className="flex h-16 items-center justify-between">
+                        <div className="flex items-center">
+                            <Link href="/" className="flex-shrink-0 pl-4">
+                                <span className="text-xl font-semibold text-[#333333]">🎅{" "}{ChristmasCountdown()}</span>
+                            </Link>
+                        </div>
+                        <div className="hidden md:block">
+                            <div className="ml-10 flex items-baseline space-x-4 mr-6">
+                                {menuItems.map((item) => (
+                                    <Link
+                                        key={item.name}
+                                        href={item.href}
+                                        className="rounded-md px-3 py-2 text-sm font-medium text-[#333333] hover:bg-white hover:bg-opacity-10"
+                                    >
+                                        {item.name}
+                                    </Link>
+                                ))}
+                            </div>
+                        </div>
+                        <div className="-mr-2 pr-8 flex md:hidden">
+                            <button
+                                className="text-white"
+                                onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+                            >
+                                {isMobileMenuOpen ? (
+                                    <X className="h-6 w-6" aria-hidden="true" />
+                                ) : (
+                                    <Menu className="h-6 w-6" aria-hidden="true" />
+                                )}
+                            </button>
+                        </div>
+                    </div>
+            </div>
+
+            {isMobileMenuOpen && (
+                <div className="absolute left-0 right-0 md:hidden">
+                    <div className="mt-2 space-y-1 rounded-lg bg-white bg-opacity-20 px-2 pb-3 pt-2 backdrop-blur-lg backdrop-filter">
+                        {menuItems.map((item) => (
+                            <Link
+                                key={item.name}
+                                href={item.href}
+                                className="block rounded-md px-3 py-2 text-base font-medium text-white hover:bg-white hover:bg-opacity-10"
+                            >
+                                {item.name}
+                            </Link>
+                        ))}
+                    </div>
                 </div>
-            </div>
-            <div className="flex gap-4">
-                <Link href="/">Home</Link>
-                <Link href="/about">Über</Link>
-                <Link href="/contact">Kontakt</Link>
-            </div>
-        </header>
-    );
+            )}
+        </nav>
+    )
+}
+
+function ChristmasCountdown() {
+        const [timeLeft, setTimeLeft] = useState('')
+
+        useEffect(() => {
+                const updateCountdown = () => {
+                        const christmas = new Date(new Date().getFullYear(), 11, 25)
+                        if (new Date() > christmas) {
+                                christmas.setFullYear(christmas.getFullYear() + 1)
+                        }
+                        
+                        const diff = christmas.getTime() - new Date().getTime()
+                        const days = Math.floor(diff / (1000 * 60 * 60 * 24))
+                        const hours = Math.floor((diff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60))
+                        const minutes = Math.floor((diff % (1000 * 60 * 60)) / (1000 * 60))
+                        const seconds = Math.floor((diff % (1000 * 60)) / 1000)
+                        
+                        setTimeLeft(`${days}d ${hours}h ${minutes}m ${seconds}s!`)
+                        setTimeout(updateCountdown, 1000)
+                }
+
+                updateCountdown()
+        }, [])
+
+        return timeLeft
 }
